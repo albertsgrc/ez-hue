@@ -9,7 +9,7 @@ A simple easy to use Javascript interface to the Philips Hue API
 ## Example usage
 
 ```coffeescript
-{ Api, LightGroup } = require '..'
+{ Api, LightGroup } = require 'ez-hue'
 
 # TODO: Get your username following the steps on https://developers.meethue.com/documentation/getting-started
 #       You can get your bridge IP address running (new Api).hostname

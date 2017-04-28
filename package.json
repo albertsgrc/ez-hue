@@ -1,0 +1,30 @@
+{
+  "name": "ez-hue",
+  "version": "1.0.0",
+  "description": "A simple easy to use Javascript interface to the Philips Hue API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/albertsgrc/ez-hue.git"
+  },
+  "keywords": [
+    "philips",
+    "hue",
+    "smart",
+    "light",
+    "api"
+  ],
+  "author": "Albert Segarra Roca",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/albertsgrc/ez-hue/issues"
+  },
+  "homepage": "https://github.com/albertsgrc/ez-hue#readme",
+  "dependencies": {
+    "onecolor": "^3.0.4",
+    "sync-request": "^4.0.3"
+  }
+}

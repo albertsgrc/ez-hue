@@ -1,14 +1,3 @@
-# ez-hue
-
-A simple easy to use Javascript interface to the Philips Hue API
-
-## Installation
-
-`npm install ez-hue`
-
-## Example usage
-
-```coffeescript
 { Api, LightGroup } = require '..'
 
 # TODO: Get your username following the steps on https://developers.meethue.com/documentation/getting-started
@@ -116,4 +105,3 @@ do randomMadness = (lights) ->
 
     lights.turnOn()
     f light for light in lights.array
-```

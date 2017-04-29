@@ -1,6 +1,6 @@
 {
   "name": "ez-hue",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A simple easy to use Javascript interface to the Philips Hue API",
   "main": "index.js",
   "scripts": {

@@ -29,6 +29,8 @@ toXY = (color) ->
     turnOff: -> @setState { on: no }
     setColor: (color) -> @setState toXY(Color(color))
     setBrightness: (value) -> @setState { bri: Math.round value*254 }
+    setTransitionTime: (value) -> @setState { transitiontime: value }
+    setEffect: (value) -> @setState { effect: value }
 
 @LightGroup = class LightGroup
     constructor: (lights) ->

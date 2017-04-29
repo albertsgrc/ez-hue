@@ -11,7 +11,8 @@ A simple easy to use Javascript interface to the Philips Hue API
 ```coffeescript
 { Api, LightGroup } = require 'ez-hue'
 
-# TODO: Get your username following the steps on https://developers.meethue.com/documentation/getting-started
+# TODO: Get your username following the steps on
+#       https://developers.meethue.com/documentation/getting-started
 #       You can get your bridge IP address running (new Api).hostname
 USERNAME = "your-username"
 
@@ -23,82 +24,66 @@ api = new Api { username: USERNAME, hostname: '192.168.1.128' }
 
 
 # GETTING ALL LIGHTS
-lights = api.getLights() # lights.array contains an array with the lights, lights.object contains the lights indexed by name
+lights = api.getLights() # lights.array contains an array with the lights,
+                         # lights.object contains the lights indexed by name
 
 
 
 # TURNING ON/OFF
 lights.turnOff() # Turn off all lights
 lights.turnOn() # Turn them back on
-lights.Bola.turnOff() # Turn off only light with name 'Bola'
+lights.Bola.turnOff() # Turn off only light with name 'Bola',
+                      # note that lights also has all properties that
+                      # lights.object has (light names)
 
 
 
 # SETTING BRIGHTNESS
-lights.setBrightness(0.7) # Set brightness of all lights to 70%
-lights.Bola.setBrightness(1) # Set light with name 'Bola' to full brightness, note that lights also has all properties that the lights.object has
+lights.setBrightness 0.7 # Set brightness of all lights to 70%
+lights.Bola.setBrightness 1 # Set light with name 'Bola' to full brightness
 
 
 
 # SETTING COLOR
 lights.setColor 'FF5500' # Set color of all lights to #FF5500.
-                         # See https://github.com/One-com/one-color for all available color formats
 lights.Bola.setColor 'orange' # Set color of light with name 'Bola' to orange
-lights.LivingRoom1.setColor 'rgb(124, 96, 200)' # Set color of light with name 'LivingRoom1' to rgb(124, 96, 200)
+lights.LivingRoom1.setColor 'rgb(124, 96, 200)' # Set color of light with name
+                                                # 'LivingRoom1' to
+                                                # rgb(124, 96, 200)
+
+
+
+# SETTING TRANSITION TIME
+lights.setTransitionTime 0 # Default is 4 (400ms). This means for a value of x,
+                           # lights will take x*100ms to change state when an
+                           # operation is applied to them
 
 
 
 # LIGHT GROUPS
-# Create a light group to to perform operations on all of them at the same time. The value returned by api.getLights() is also a LightGroup
-bedRoomLights = new LightGroup [ lights.bedRoomTable, lights.bedRoomCeiling ] # bedRoomLights.bedRoomTable, bedRoomLights.bedRoomCeiling
-# or, if you want to give them new names (otherwise takes name from lights.bedRoomCeiling.name)
-bedRoomLights = new LightGroup { table: lights.bedRoomTable, ceiling: lights.bedRoomCeiling }
+# Create a light group to perform operations on all its lights at the same time.
+# The value returned by api.getLights() is also a LightGroup
+bedRoomLights = new LightGroup [ lights.bedRoomTable, lights.bedRoomCeiling ]
+# bedRoomLights.bedRoomTable, bedRoomLights.bedRoomCeiling to access
+# individual lights
+
+# or, if you want to give them new names
+bedRoomLights = new LightGroup { table: lights.bedRoomTable
+                                 ceiling: lights.bedRoomCeiling }
 
 bedRoomLights.turnOff() # Going to sleep boi
-bedRoomLights.table.turnOn().setBrightness(0.5).setColor('LightYellow') # Nevermind I'll read a book
+bedRoomLights.table.turnOn()
+                   .setBrightness(0.5)
+                   .setColor('LightYellow') # Nevermind I'll read a book
 
 # Add/remove
-bedRoomLights.add(lights.bedRoomStrip, 'strip') # Add light with name 'bedRoomStrip' to the group and alias it to 'strip' (alias is optional, otherwise takes same name)
-bedRoomLights.remove('strip') # Remove it from the group
+bedRoomLights.add lights.bedRoomStrip, 'strip'  # Add light with name
+                                                # 'bedRoomStrip' to the group
+                                                # and alias it to 'strip'
+                                                # (alias is optional)
+bedRoomLights.remove 'strip' # Remove it from the group
 
 
-
-# Note that because light names are used as keys you should not
-# have any duplicate light names in your setup. You can change the light
-# names in the Hue Mobile App or Website (https://my.meethue.com)
-
-# Also, note that light groups and operations on lights (turnOn, setBrightness, etc.)
-# are both properties of the light group. This means you cannot have any light
-# named 'turnOn', or 'setColor' and so on, although that would be weird.
-
-### LIGHT PROPERTIES
-Every light, for instance lights.Bola in this example, contains this properties
-(values are just an example).
-
-{
-  api: Api from new Api to which the light belongs
-  lightId: '2', # Light id generated by the Hue Api
-  state:
-   { on: true,
-     bri: 254,
-     hue: 9785,
-     sat: 254,
-     effect: 'none',
-     xy: [ 0.4921, 0.458 ],
-     ct: 424,
-     alert: 'none',
-     colormode: 'xy',
-     reachable: true },
-  type: 'Extended color light',
-  name: 'Bola',
-  modelid: 'LCT010',
-  manufacturername: 'Philips',
-  uniqueid: 'XX:XX:XX:XX:XX:XX:XX:XX-XX',
-  swversion: '1.15.2_r19181',
-  swconfigid: 'F921C859',
-  productid: 'Philips-LCT010-1-A19ECLv4'
-}
-###
 
 # Random shiet boi
 do randomMadness = (lights) ->
@@ -117,3 +102,52 @@ do randomMadness = (lights) ->
     lights.turnOn()
     f light for light in lights.array
 ```
+
+## Colors
+
+See https://github.com/One-com/one-color for all available color formats for `light.setColor`
+
+## Light properties
+
+Every light, for instance lights.Bola in the example, contains this properties
+(values are just an example).
+
+```javascript
+{
+  api // Api from new Api to which the light belongs
+  lightId: '2', // Light id generated by the Hue Api
+  state:
+   { on: true,
+     bri: 254,
+     hue: 9785,
+     sat: 254,
+     effect: 'none', // Can be 'none' or 'colorloop', in which the light will cycle through all colors with current saturation and brightness settings
+     xy: [ 0.4921, 0.458 ], // Color description
+     ct: 424, // Color temperature
+     alert: 'none',
+     colormode: 'xy',
+     reachable: true }, // Whether the light is reachable (most likely indicates whether it has power or not)
+  type: 'Extended color light',
+  name: 'Bola',
+  modelid: 'LCT010',
+  manufacturername: 'Philips',
+  uniqueid: 'XX:XX:XX:XX:XX:XX:XX:XX-XX',
+  swversion: '1.15.2_r19181',
+  swconfigid: 'F921C859',
+  productid: 'Philips-LCT010-1-A19ECLv4'
+}
+```
+
+## Notes
+
+Note that because light names are used as keys you should not
+have any duplicate light names in your setup. You can change the light
+names in the Hue Mobile App or Website (https://my.meethue.com)
+
+Also, note that light groups and operations on lights (turnOn, setBrightness, etc.)
+are both properties of the light group. This means you cannot have any light
+named 'turnOn', or 'setColor' and so on, although that would be weird.
+
+This API is not complete. There is some functionality that the Philips Hue API
+offers which is not implemented. The aim of this interface is to be simple
+rather than to offer complete functionality. PR are welcome though.

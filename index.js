@@ -69,6 +69,18 @@ this.Light = Light = (function() {
     });
   };
 
+  Light.prototype.setTransitionTime = function(value) {
+    return this.setState({
+      transitiontime: value
+    });
+  };
+
+  Light.prototype.setEffect = function(value) {
+    return this.setState({
+      effect: value
+    });
+  };
+
   return Light;
 
 })();

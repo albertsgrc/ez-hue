@@ -51,10 +51,10 @@ bedRoomLights.add(lights.bedRoomStrip, 'strip');
 bedRoomLights.remove('strip');
 
 (randomMadness = function(lights) {
-  var COLOR_CHARACTERS, f, j, len, light, pickRandom, randomInRange, randomTime, ref1, results;
-  COLOR_CHARACTERS = "abcdef0123456789";
-  pickRandom = function(from) {
-    return from[Math.round(Math.random() * (from.length - 1))];
+  var COLOR_CHARS, f, j, len, light, pickRandom, randomInRange, randomTime, ref1, results;
+  COLOR_CHARS = "abcdef0123456789";
+  pickRandom = function(a) {
+    return a[Math.round(Math.random() * (a.length - 1))];
   };
   randomInRange = function(a, b) {
     return Math.random() * (b - a) + a;
@@ -68,7 +68,7 @@ bedRoomLights.remove('strip');
       var j, results;
       results = [];
       for (i = j = 0; j < 6; i = ++j) {
-        results.push(pickRandom(COLOR_CHARACTERS));
+        results.push(pickRandom(COLOR_CHARS));
       }
       return results;
     })()).join(""));

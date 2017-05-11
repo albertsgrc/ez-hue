@@ -3,7 +3,13 @@ Color = require 'onecolor'
 
 module.exports = @
 
-r = (args...) -> JSON.parse request(args...).getBody('utf8')
+r = (args...) ->
+    result = JSON.parse request(args...).getBody('utf8')
+
+    if result[0]?.error?
+        throw new Error "Cannot perform request: #{result[0].error.description}"
+
+    result
 
 toXY = (color) ->
     [ red, green, blue ] = [ color.red(), color.green(), color.blue() ]
@@ -25,14 +31,37 @@ toXY = (color) ->
         @state[prop] = value for prop, value of state
         this
 
+    setAttributes: (attributes) ->
+        r 'PUT', @api.url("lights/#{@lightId}"), { json: attributes }
+        @[prop] = value for prop, value of attributes
+        this
+
     turnOn: -> @setState { on: yes }
     turnOff: -> @setState { on: no }
     setColor: (color) -> @setState toXY(Color(color))
     setBrightness: (value) -> @setState { bri: Math.round value*254 }
     setTransitionTime: (value) -> @setState { transitiontime: value }
     setEffect: (value) -> @setState { effect: value }
+    rename: (newName) ->
+        previousName = @name
+        @setAttributes { name: newName }
+        LightGroup.notifyRenameAll(previousName, newName)
+
 
 @LightGroup = class LightGroup
+    @automaticRename: on
+    @created: []
+
+    @notifyRenameAll: (previousName, newName) ->
+        lightGroup.notifyRename(previousName, newName) for lightGroup in LightGroup.created
+
+    notifyRename: (previousName, newName) ->
+        light = @object[previousName]
+        if light?
+            delete @object[previousName]
+            delete @[previousName]
+            @object[newName] = @[newName] = light
+
     constructor: (lights) ->
         if Array.isArray lights
             @array = lights
@@ -46,11 +75,13 @@ toXY = (color) ->
 
         this[lightName] = light for lightName, light of @object
 
-        for prop, value of new Light when typeof value is "function"
+        for prop, value of new Light when typeof value is "function" and prop not in ['rename']
             do (prop) =>
                 this[prop] = (args...) =>
                     for light in @array
                         light[prop](args...)
+
+        LightGroup.created.push(this) if LightGroup.automaticRename
 
     remove: (lightName) ->
         @array.splice(@array.indexOf(@object[lightName]), 1)
@@ -58,10 +89,9 @@ toXY = (color) ->
         delete @[lightName]
 
     add: (light, name) ->
-        throw "First argument to LightGroup::add must be a Light!" if light not instanceof Light
+        throw new Error("First argument to LightGroup::add must be a Light!") if light not instanceof Light
         @array.push light
-        @object[name ? light.name] = light
-        @[name ? light.name] = light
+        @object[name ? light.name] = @[name ? light.name] = light
 
 
 @Api = class Api

@@ -9,9 +9,13 @@ Color = require('onecolor');
 module.exports = this;
 
 r = function() {
-  var args;
+  var args, ref, result;
   args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-  return JSON.parse(request.apply(null, args).getBody('utf8'));
+  result = JSON.parse(request.apply(null, args).getBody('utf8'));
+  if (((ref = result[0]) != null ? ref.error : void 0) != null) {
+    throw new Error("Cannot perform request: " + result[0].error.description);
+  }
+  return result;
 };
 
 toXY = function(color) {
@@ -43,6 +47,18 @@ this.Light = Light = (function() {
     for (prop in state) {
       value = state[prop];
       this.state[prop] = value;
+    }
+    return this;
+  };
+
+  Light.prototype.setAttributes = function(attributes) {
+    var prop, value;
+    r('PUT', this.api.url("lights/" + this.lightId), {
+      json: attributes
+    });
+    for (prop in attributes) {
+      value = attributes[prop];
+      this[prop] = value;
     }
     return this;
   };
@@ -81,11 +97,45 @@ this.Light = Light = (function() {
     });
   };
 
+  Light.prototype.rename = function(newName) {
+    var previousName;
+    previousName = this.name;
+    this.setAttributes({
+      name: newName
+    });
+    return LightGroup.notifyRenameAll(previousName, newName);
+  };
+
   return Light;
 
 })();
 
 this.LightGroup = LightGroup = (function() {
+  LightGroup.automaticRename = true;
+
+  LightGroup.created = [];
+
+  LightGroup.notifyRenameAll = function(previousName, newName) {
+    var i, len, lightGroup, ref, results;
+    ref = LightGroup.created;
+    results = [];
+    for (i = 0, len = ref.length; i < len; i++) {
+      lightGroup = ref[i];
+      results.push(lightGroup.notifyRename(previousName, newName));
+    }
+    return results;
+  };
+
+  LightGroup.prototype.notifyRename = function(previousName, newName) {
+    var light;
+    light = this.object[previousName];
+    if (light != null) {
+      delete this.object[previousName];
+      delete this[previousName];
+      return this.object[newName] = this[newName] = light;
+    }
+  };
+
   function LightGroup(lights) {
     var _, i, j, len, len1, light, lightName, prop, ref, ref1, ref2, ref3, value;
     if (Array.isArray(lights)) {
@@ -123,7 +173,7 @@ this.LightGroup = LightGroup = (function() {
     ref3 = new Light;
     for (prop in ref3) {
       value = ref3[prop];
-      if (typeof value === "function") {
+      if (typeof value === "function" && (prop !== 'rename')) {
         (function(_this) {
           return (function(prop) {
             return _this[prop] = function() {
@@ -141,6 +191,9 @@ this.LightGroup = LightGroup = (function() {
         })(this)(prop);
       }
     }
+    if (LightGroup.automaticRename) {
+      LightGroup.created.push(this);
+    }
   }
 
   LightGroup.prototype.remove = function(lightName) {
@@ -151,11 +204,10 @@ this.LightGroup = LightGroup = (function() {
 
   LightGroup.prototype.add = function(light, name) {
     if (!(light instanceof Light)) {
-      throw "First argument to LightGroup::add must be a Light!";
+      throw new Error("First argument to LightGroup::add must be a Light!");
     }
     this.array.push(light);
-    this.object[name != null ? name : light.name] = light;
-    return this[name != null ? name : light.name] = light;
+    return this.object[name != null ? name : light.name] = this[name != null ? name : light.name] = light;
   };
 
   return LightGroup;

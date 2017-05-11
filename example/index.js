@@ -16,11 +16,11 @@ api = new Api({
 
 lights = api.getLights();
 
-lights.turnOff();
-
 lights.turnOn();
 
-lights.Bola.turnOff();
+lights.turnOff();
+
+lights.Bola.turnOn();
 
 lights.setBrightness(0.7);
 
@@ -49,6 +49,10 @@ bedRoomLights.table.turnOn().setBrightness(0.5).setColor('LightYellow');
 bedRoomLights.add(lights.bedRoomStrip, 'strip');
 
 bedRoomLights.remove('strip');
+
+lights.Bola.rename('Ball');
+
+lights.Ball.rename('Bola');
 
 (randomMadness = function(lights) {
   var COLOR_CHARS, f, j, len, light, pickRandom, randomInRange, randomTime, ref1, results;

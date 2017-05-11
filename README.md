@@ -34,9 +34,9 @@ lights = api.getLights() # lights.array contains an array with the
 
 
 # TURNING ON/OFF
-lights.turnOff() # Turn off all lights
-lights.turnOn() # Turn them back on
-lights.Bola.turnOff() # Turn off only light with name 'Bola',
+lights.turnOn() # Turn on all lights
+lights.turnOff() # Turn them off
+lights.Bola.turnOn() # Turn on only light with name 'Bola',
                       # note that lights also has all properties that
                       # lights.object has (light names)
 
@@ -97,6 +97,22 @@ bedRoomLights.remove 'strip' # Remove it from the group
 
 
 
+# RENAMING LIGHTS
+
+lights.Bola.rename 'Ball' # Renames light Bola to Ball
+lights.Ball.rename 'Bola' # Rename back to Bola.
+                          # Notice that all the LightGroup instances
+                          # are automatically updated with the
+                          # new name. This means an array is kept
+                          # with all the LightGroup instances.
+                          # To disable this behaviour in case
+                          # you continuously create and delete
+                          # tons of lightGroups you can set
+                          # LightGroup.automaticRename = off
+                          # Now you can instead notify the rename to
+                          # each LightGroup instance manually with
+                          # myLightGroup.notifyRename('Ball', 'Bola')
+
 # Random shiet boi
 do randomMadness = (lights) ->
     COLOR_CHARS = "abcdef0123456789"
@@ -156,7 +172,9 @@ Every light, for instance lights.Bola in the example, contains this properties
 
 Note that because light names are used as keys you should not
 have any duplicate light names in your setup. You can change the light
-names in the Hue Mobile App or Website (https://my.meethue.com)
+names in the Hue Mobile App or Website (https://my.meethue.com) or
+via `light.name.rename(newName)` (see renaming lights section in the
+example).
 
 Also, note that light groups and operations on lights (turnOn, setBrightness, etc.)
 are both properties of the light group. This means you cannot have any light

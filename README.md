@@ -186,5 +186,6 @@ rather than to offer complete functionality. PR are welcome though.
 
 ## Donations
 
-Ethereum (ETH) Address: 0x1119b5933ab0316517913a9b1a44f6da67Db7b2e
-Bitcoin  (BTC) Address: 12mmoD8Qnth8tcGW8pkMvt7djbCfB65pcL
+**Ethereum (ETH) Address:** 0x1119b5933ab0316517913a9b1a44f6da67Db7b2e
+
+**Bitcoin  (BTC) Address:** 12mmoD8Qnth8tcGW8pkMvt7djbCfB65pcL

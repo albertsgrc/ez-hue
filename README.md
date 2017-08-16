@@ -105,7 +105,7 @@ lights.Ball.rename 'Bola' # Rename back to Bola.
                           # are automatically updated with the
                           # new name. This means an array is kept
                           # with all the LightGroup instances.
-                          # To disable this behaviour in case
+                          # To disable this behavior in case
                           # you continuously create and delete
                           # tons of lightGroups you can set
                           # LightGroup.automaticRename = off
@@ -183,3 +183,8 @@ named 'turnOn', or 'setColor' and so on, although that would be weird.
 This API is not complete. There is some functionality that the Philips Hue API
 offers which is not implemented. The aim of this interface is to be simple
 rather than to offer complete functionality. PR are welcome though.
+
+## Donations
+
+Ethereum (ETH) Address: 0x1119b5933ab0316517913a9b1a44f6da67Db7b2e
+Bitcoin  (BTC) Address: 12mmoD8Qnth8tcGW8pkMvt7djbCfB65pcL

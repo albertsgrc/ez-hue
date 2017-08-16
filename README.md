@@ -19,7 +19,7 @@ This example is written in [coffeescript](http://coffeescript.org/).
 USERNAME = "your-username"
 
 # if you don't know the bridge IP and want the Api to the get it
-# for ya
+# for you
 api = new Api { username: USERNAME } # IP on api.hostname
 # or, if you know it
 api = new Api { username: USERNAME, hostname: '192.168.1.128' }
@@ -113,7 +113,7 @@ lights.Ball.rename 'Bola' # Rename back to Bola.
                           # each LightGroup instance manually with
                           # myLightGroup.notifyRename('Ball', 'Bola')
 
-# Random shiet boi
+
 do randomMadness = (lights) ->
     COLOR_CHARS = "abcdef0123456789"
 
@@ -186,5 +186,6 @@ rather than to offer complete functionality. PR are welcome though.
 
 ## Donations
 
-Ethereum (ETH) Address: 0x1119b5933ab0316517913a9b1a44f6da67Db7b2e
-Bitcoin  (BTC) Address: 12mmoD8Qnth8tcGW8pkMvt7djbCfB65pcL
+**Ethereum (ETH) Address:** 0x1119b5933ab0316517913a9b1a44f6da67Db7b2e
+
+**Bitcoin (BTC) Address:** 12mmoD8Qnth8tcGW8pkMvt7djbCfB65pcL
